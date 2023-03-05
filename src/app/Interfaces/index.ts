@@ -19,6 +19,9 @@ export interface LoginSuccess{
     token:string
     role:string
     name:string
+    email:string
+    id:string
+    password:string
 }
 
 export interface Booking{

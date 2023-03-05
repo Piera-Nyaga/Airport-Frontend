@@ -5,6 +5,10 @@ import { AuthenticationService } from 'src/app/Services/authentication.service';
 import { AuthService } from 'src/app/Services/auth.service';
 import { Router } from '@angular/router';
 import { ErrorComponent } from 'src/app/error/error.component';
+import { userState } from 'src/app/State/Reducers/userReducers';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { loginUser } from 'src/app/State/Actions/userActions';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +19,10 @@ import { ErrorComponent } from 'src/app/error/error.component';
 })
 export class LoginComponent implements OnInit {
   form!:FormGroup
+  login$!:Observable<userState[]>
   error=null
   constructor(private fb:FormBuilder, private authentication:AuthenticationService, private auth :AuthService,
-    private router:Router
+    private router:Router, private store:Store<userState>
     ){
 
   }
@@ -40,6 +45,8 @@ export class LoginComponent implements OnInit {
     },(error)=>{
     this.error=error.error
     })
+    this.store.dispatch(loginUser({userlogged:this.form.value}))
+    console.log(this.form.value)
   }
 
   Close(){

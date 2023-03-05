@@ -1,64 +1,65 @@
-import { createReducer, on } from '@ngrx/store';
-// import { AuthState, initialAuthState } from './authState';
-import { loginUser, loginUserSuccess, loginUserFailure, getSingleUser } from '../Actions/userActions'
-import { LoginSuccess, User } from "../../Interfaces";
+ import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+ import { loginUser, loginUserSuccess, loginUserFailure, updateUserSuccess } from '../Actions/userActions'
+ import { LoginSuccess, User } from "../../Interfaces";
 
-export interface userState {
-    isLoggedIn: boolean
-    loading: false
-    Name: string,
-    Email: string, 
-    Password: string,
-    user: LoginSuccess | null
-    errorMessage: string | null
-}
+ export interface userState {
+     isLoggedIn: boolean,
+     Id:string,
+     Name:string,
+     Email:string,
+     Password:string,
+     user: LoginSuccess |null,
+     errorMessage: string | null 
+ }
 
-export const initialUserState: userState= {
-    isLoggedIn: false,
-    loading: false,
-    Name: '',
-    Email: '',
-    Password: '',
-    user: null,
-    errorMessage: null,
-    // updateError: '',
-};
+ export const initialUserState: userState= {
+     isLoggedIn: false,
+     Id:'',
+     Name: '',
+     Email: '',
+     Password: '',
+     user: null,
+     errorMessage: null,
+ };
 
-export const authReducer = createReducer<userState>(
-initialUserState,
-    // on(login, (state,actions) => ({ ...state, error: null })),  
-    on(loginUserSuccess, (state, actions): userState => ({
-        ...state, 
-        isLoggedIn: true,
-        user: actions.loginSuccess,
-        errorMessage: null,
-    })),
+ const userSliceState= createFeatureSelector<userState>('profile')
 
-    on(loginUserFailure, (state, actions): userState => ({
-        ...state,
-        isLoggedIn: false,
-        user: null,
-        errorMessage: actions.errorMessage,
+  export const profile= createSelector(userSliceState, state=>state.user)
+  const myId= createSelector(userSliceState, state=>state.Id)
 
-    })),
 
-    // on(getSingleUser,(state,actions):userState=>{
-    //     return{
-    //         ...state,
-    //         bookingId:actions.id
-    //     }
-    //  }),
+  export const getSingleUser=createSelector(profile,myId,(state)=>{
+      return state
+  })
 
-    // on(updateUserProfileSuccess, (state, action): AuthState => {
-    //     const updatedUser = state.user.(item => {
-    //         return item.Email === action.user.Email ? action.user : item
-    //     })
-    //     return {
-    //         ...state,
-    //         errorMessage: '',
-    //         user: updatedUser
-    //     }
-    // }),
+ export const userReducer = createReducer<userState>(
+ initialUserState, 
+     on(loginUserSuccess, (state, actions): userState => (
+         {
+         ...state, 
+         isLoggedIn: true,
+         user: actions.loginSuccess,
+         errorMessage: null,
+     })),
 
-    // on(logout, () => initialUserState),
-);
+     on(loginUserFailure, (state, actions): userState => (
+         {
+         ...state,
+         isLoggedIn: false,
+         user:null,
+         errorMessage: actions.errorMessage,
+
+     })),
+
+
+      on(updateUserSuccess, (state, action): userState => {
+          const updatedUser = state.user
+
+          return {
+              ...state,
+              errorMessage: '',
+              user: updatedUser
+          }
+      }),
+
+ )

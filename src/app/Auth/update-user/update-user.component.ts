@@ -7,6 +7,8 @@ import { AppState } from 'src/app/State/appState';
 import { Store } from '@ngrx/store';
 import { updateUser } from 'src/app/State/Actions/userActions';
 import { getSingleBooking } from 'src/app/State/Reducers/bookingReducer';
+import { User } from 'src/app/Interfaces';
+import { getSingleUser } from 'src/app/State/Reducers/userReducers';
 
 @Component({
   selector: 'app-update-user',
@@ -16,45 +18,37 @@ import { getSingleBooking } from 'src/app/State/Reducers/bookingReducer';
   styleUrls: ['./update-user.component.css']
 })
 export class UpdateUserComponent {
-  // show=false
-  // id!:string
-  // form!:FormGroup
-  // constructor(private fb:FormBuilder,private route:ActivatedRoute,private router:Router, private store:Store<AppState>){
+  show=false
+  id!:string
+  form!:FormGroup
+  constructor(private fb:FormBuilder,private route:ActivatedRoute,private router:Router, private store:Store<AppState>){
 
-  // }
+  }
 
-  // ngOnInit(): void {
+  ngOnInit(): void {
      
-  //   this.form = this.fb.group({
-  //     Name:[null, Validators.required],
-  //     Email:[null, [Validators.required, Validators.email]],
-  //     Password:[null, Validators.required]
-  //   })
-  //   // this.bookingService.getUserBooking()
-
-  //   this.route.params.subscribe((param:Params)=>{
-  //     this.id=param['id']
-  //     })
-
-  //     this.store.select(getSingleBooking).subscribe(res=>{
-  //       if(res){
-  //         // let date =new Date(res.TravelDate).toISOString().slice(0,10)         
-  //         this.form.setValue({
-  //           Name:res.Name,
-  //           Email:res.Email,
-  //           Password:res.Password
-  //       })
-  //       }
-  //     })
+    this.form = this.fb.group({
+      Name:[null, Validators.required],
+      Email:[null, [Validators.required, Validators.email]],
+      Password:[null, Validators.required]
+    })
     
-  // }
-
-  // submitForm(){
-  //   // this.bookingService.updateBooking(this.id, this.form.value).subscribe()
-  //   this.store.dispatch(updateUser({updatedUser:this.form.value, id:this.id}))
-  //   this.router.navigate(['../'],{relativeTo:this.route})
-  //   // this.bookingService.getUserBooking()
+      this.store.select(getSingleUser).subscribe(res=>{
+        if(res){
+         this.id=res.id    
+          this.form.setValue({
+            Name:res.name,
+            Email:res.email,
+            Password:res.password
+        })
+        }
+      })
     
-  // }
+  }
 
+  submitForm(){
+    this.store.dispatch(updateUser({id:this.id, updatedUser:this.form.value}))
+    this.router.navigate(['../'],{relativeTo:this.route}) 
+  }
 }
+

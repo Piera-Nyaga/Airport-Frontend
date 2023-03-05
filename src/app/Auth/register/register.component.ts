@@ -24,9 +24,13 @@ export class RegisterComponent implements OnInit{
     })
   }
   submitForm(){
-    this.authentication.registerUser(this.form.value).subscribe(response=>{
+    console.log(this.form.value)
+    this.authentication.registerUser(this.form.value)
+    .subscribe(
+      response=>{
       console.log(response);
       this.router.navigate(['login'])
     })
   }
-}
+  }
+

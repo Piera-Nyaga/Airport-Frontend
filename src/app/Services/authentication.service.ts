@@ -10,6 +10,7 @@ export class AuthenticationService {
   constructor(private http:HttpClient) { }
 
   registerUser(user:User):Observable<Message>{
+    console.log(user);
     return this.http.post<Message>('http://localhost:4000/auth/register',user)
   }
 
@@ -17,4 +18,7 @@ export class AuthenticationService {
     return this.http.post<LoginSuccess>('http://localhost:4000/auth/login',user)
   }
 
+  updateUser(id:string,updatedUser:User):Observable<User>{
+      return this.http.put<User>(`http://localhost:4000/auth/user/${id}`,updatedUser)
+     }
 }
