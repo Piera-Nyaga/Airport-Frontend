@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { AddBooking, Booking, Message } from '../Interfaces';
+import { AddBooking, Booking, Message, User } from '../Interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,10 @@ export class BookingService {
     return  this.http.put<Booking>(`http://localhost:4000/flights/${id}`, updatedBooking)
    }
  
+
+  //  updateUser(id:string,updatedUser:loginUser):Observable<User>{
+  //   return  this.http.put<User>(`http://localhost:4000/auth/${id}`, updatedBooking)
+  //  }
  
 
 
